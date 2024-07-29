@@ -1,4 +1,4 @@
-package com.skwzz.domain.user.controller.payload.request;
+package com.skwzz.domain.user.payload.request;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class RegisterRequestDto {
+public class RegisterRequestDTO {
 
     private User user;
 
