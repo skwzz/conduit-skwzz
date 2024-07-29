@@ -49,16 +49,16 @@ public class UserService {
         try{
             log.info(request.toString());
             LoginRequestDTO.User user = request.getUser();
+            User findUser = userRepository.findByEmail(user.getEmail());
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
+                    new UsernamePasswordAuthenticationToken(findUser.getUsername(), user.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            User findUser = userRepository.findByEmail(user.getEmail());
             String token = jwtUtil.createToken(user.getEmail());
 
             return UserResponseDTO.builder()
                     .user(UserResponseDTO.User.builder()
-                            .email(findUser.getUsername())
+                            .email(findUser.getEmail())
                             .token(token)
                             .username(findUser.getUsername())
                             .bio(findUser.getBio())

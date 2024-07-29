@@ -1,5 +1,6 @@
 package com.skwzz.domain.user.service;
 
+import com.skwzz.domain.user.auth.AuthenticatedUser;
 import com.skwzz.domain.user.entity.User;
 import com.skwzz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +20,12 @@ public class AuthService implements UserDetailsService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUsername(username);
         if (user == null) {
             throw new UsernameNotFoundException("사용자를 찾을 수 없습니다.");
         }
 
-        return org.springframework.security.core.userdetails.User
-                .withUsername(user.getEmail())
-                .password(user.getPassword())
-                .authorities("ROLE_USER")
-                .build();
+        return new AuthenticatedUser(user);
     }
 }
