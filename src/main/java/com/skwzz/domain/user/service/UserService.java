@@ -4,6 +4,7 @@ import com.skwzz.domain.user.mapper.UserMapper;
 import com.skwzz.domain.user.payload.request.LoginRequestDTO;
 import com.skwzz.domain.user.payload.request.RegisterRequestDTO;
 import com.skwzz.domain.user.entity.User;
+import com.skwzz.domain.user.payload.request.UpdateUserRequestDTO;
 import com.skwzz.domain.user.payload.response.UserResponseDTO;
 import com.skwzz.domain.user.repository.UserRepository;
 import com.skwzz.global.util.JwtUtil;
@@ -16,6 +17,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -61,5 +64,21 @@ public class UserService {
 
     public UserResponseDTO getUserInfo(User user){
         return UserMapper.toDto(user);
+    }
+
+
+    @Transactional
+    public UserResponseDTO updateUserInfo(UpdateUserRequestDTO request, User user) {
+        log.info(request.toString());
+        UpdateUserRequestDTO.User forUpdateDto = request.getUser();
+        User findUser = userRepository.findByUsername(user.getUsername());
+        List<User> byUsernameOrEmailAndIdxNot = userRepository.findByUsernameOrEmailAndIdxNot(forUpdateDto.getUsername(), forUpdateDto.getEmail(), findUser.getIdx());
+
+        if(!byUsernameOrEmailAndIdxNot.isEmpty()){
+            throw new RuntimeException("이미 사용중인 이름이나 이메일이 존재합니다.");
+        }
+
+        User changedUser = findUser.changeUserInfo(forUpdateDto);
+        return UserMapper.toDto(changedUser);
     }
 }
