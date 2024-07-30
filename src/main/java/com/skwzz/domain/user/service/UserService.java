@@ -33,7 +33,7 @@ public class UserService {
         User user = User.builder()
                 .email(requestUser.getEmail())
                 .username(requestUser.getUsername())
-                .password(passwordEncoder.encode(requestUser.getEmail()))
+                .password(passwordEncoder.encode(requestUser.getPassword()))
                 .build();
         userRepository.save(user);
 
