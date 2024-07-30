@@ -1,5 +1,6 @@
 package com.skwzz.domain.user.service;
 
+import com.skwzz.domain.user.mapper.UserMapper;
 import com.skwzz.domain.user.payload.request.LoginRequestDTO;
 import com.skwzz.domain.user.payload.request.RegisterRequestDTO;
 import com.skwzz.domain.user.entity.User;
@@ -37,12 +38,7 @@ public class UserService {
                 .build();
         userRepository.save(user);
 
-        return UserResponseDTO.builder()
-                .user(UserResponseDTO.User.builder()
-                        .email(user.getEmail())
-                        .username(user.getUsername())
-                        .build())
-                .build();
+        return UserMapper.toDto(user);
     }
 
     public UserResponseDTO login(LoginRequestDTO request) {
@@ -54,20 +50,16 @@ public class UserService {
                     new UsernamePasswordAuthenticationToken(findUser.getUsername(), user.getPassword())
             );
             SecurityContextHolder.getContext().setAuthentication(authentication);
-            String token = jwtUtil.createToken(user.getEmail());
+            String token = jwtUtil.createToken(findUser.getUsername());
 
-            return UserResponseDTO.builder()
-                    .user(UserResponseDTO.User.builder()
-                            .email(findUser.getEmail())
-                            .token(token)
-                            .username(findUser.getUsername())
-                            .bio(findUser.getBio())
-                            .image(findUser.getImage())
-                            .build())
-                    .build();
+            return UserMapper.toDto(findUser, token);
         }catch (Exception e){
             log.error(e.getMessage());
             throw new RuntimeException("Invalid login credentials", e);
         }
+    }
+
+    public UserResponseDTO getUserInfo(User user){
+        return UserMapper.toDto(user);
     }
 }

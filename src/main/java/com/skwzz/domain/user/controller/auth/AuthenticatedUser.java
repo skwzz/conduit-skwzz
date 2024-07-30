@@ -1,8 +1,9 @@
-package com.skwzz.domain.user.auth;
+package com.skwzz.domain.user.controller.auth;
 
 import com.skwzz.domain.user.entity.User;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -12,6 +13,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
+@ToString
 public class AuthenticatedUser implements UserDetails {
 
     private final User user;

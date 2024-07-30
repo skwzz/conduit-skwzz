@@ -1,6 +1,6 @@
 package com.skwzz.domain.user.service;
 
-import com.skwzz.domain.user.auth.AuthenticatedUser;
+import com.skwzz.domain.user.controller.auth.AuthenticatedUser;
 import com.skwzz.domain.user.entity.User;
 import com.skwzz.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
