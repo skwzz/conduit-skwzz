@@ -1,3 +1,6 @@
+DROP TABLE IF EXISTS `article_tag`;
+DROP TABLE IF EXISTS `tag`;
+DROP TABLE IF EXISTS `article`;
 DROP TABLE IF EXISTS `member`;
 
 CREATE TABLE `member` (
@@ -7,4 +10,29 @@ CREATE TABLE `member` (
     password VARCHAR(255) NOT NULL,
     bio VARCHAR(255),
     image VARCHAR(255)
+);
+
+CREATE TABLE `article` (
+   idx BIGINT AUTO_INCREMENT PRIMARY KEY,
+   slug VARCHAR(255) NOT NULL UNIQUE,
+   title VARCHAR(255) NOT NULL,
+   description TEXT,
+   body TEXT,
+   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+   member_idx BIGINT,
+   CONSTRAINT fk_user FOREIGN KEY (member_idx) REFERENCES `member` (idx)
+);
+
+CREATE TABLE `tag` (
+   idx BIGINT AUTO_INCREMENT PRIMARY KEY,
+   tag_name VARCHAR(255) NOT NULL UNIQUE
+);
+
+CREATE TABLE `article_tag` (
+   idx BIGINT AUTO_INCREMENT PRIMARY KEY,
+   article_idx BIGINT NOT NULL,
+   tag_idx BIGINT NOT NULL,
+   CONSTRAINT fk_article FOREIGN KEY (article_idx) REFERENCES `article` (idx) ON DELETE CASCADE,
+   CONSTRAINT fk_tag FOREIGN KEY (tag_idx) REFERENCES `tag` (idx) ON DELETE CASCADE
 );

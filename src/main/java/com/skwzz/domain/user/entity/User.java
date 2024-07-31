@@ -3,11 +3,9 @@ package com.skwzz.domain.user.entity;
 
 import com.skwzz.domain.user.payload.request.UpdateUserRequestDTO;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@ToString
 @Builder
 @Getter
 @NoArgsConstructor
